@@ -1,4 +1,4 @@
-/* style-2.css — futurystyczny neonowy styl */
+
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
 html, body {
@@ -8,8 +8,6 @@ html, body {
     color: #eaeaea;
     display: flex;
     flex-direction: column;
-
-    /* Futurystyczne tło: auto + delikatny gradient */
     background-image:
         radial-gradient(circle at top, rgba(15,32,39,0.85), rgba(32,58,67,0.75), rgba(44,83,100,0.7)),
         url('https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1600&q=80');
@@ -28,7 +26,7 @@ header {
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     border-bottom: 3px solid #00e5ff;
     position: relative;
-    overflow: visible; /* zapobiega obcinaniu na mobile */
+    overflow: visible; 
 }
 
 header::after {
@@ -113,7 +111,6 @@ footer {
     box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
 }
 
-/* Responsywność */
 @media (max-width: 768px) {
     h1 { font-size: 2rem; }
     h2 { font-size: 1.2rem; }
