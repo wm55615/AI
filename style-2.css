@@ -1,0 +1,122 @@
+/* style-2.css — futurystyczny neonowy styl */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    color: #eaeaea;
+    display: flex;
+    flex-direction: column;
+
+    /* Futurystyczne tło: auto + delikatny gradient */
+    background-image:
+        radial-gradient(circle at top, rgba(15,32,39,0.85), rgba(32,58,67,0.75), rgba(44,83,100,0.7)),
+        url('https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?auto=format&fit=crop&w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+}
+
+
+
+header {
+    background: linear-gradient(90deg, #00c6ff, #0072ff);
+    text-align: center;
+    padding: 2.5rem 1rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    border-bottom: 3px solid #00e5ff;
+    position: relative;
+    overflow: visible; /* zapobiega obcinaniu na mobile */
+}
+
+header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    background: rgba(255,255,255,0.05);
+    transform: skewY(-8deg);
+    pointer-events: none;
+}
+
+
+h1 {
+    margin: 0;
+    font-size: 2.8rem;
+    color: #fff;
+    text-shadow: 0 0 12px #00e5ff, 0 0 24px #00e5ff;
+    letter-spacing: 2px;
+}
+
+h2 {
+    margin: 2rem 1.5rem 1rem;
+    color: #00e5ff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-left: 5px solid #00e5ff;
+    padding-left: 0.75rem;
+}
+
+h3 {
+    margin: 1rem 1.5rem 0.5rem;
+    color: #ffcc00;
+    text-shadow: 0 0 10px #ffcc00;
+}
+
+p, ul {
+    margin: 0 1.5rem 1rem;
+}
+
+ul {
+    list-style: square;
+    padding-left: 2rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+figure {
+    margin: 2rem auto;
+    text-align: center;
+}
+
+img {
+    max-width: 90%;
+    height: auto;
+    border: 2px solid #00e5ff;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,229,255,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(0,229,255,0.7);
+}
+
+footer {
+    margin-top: auto;
+    background: linear-gradient(90deg, #0072ff, #00c6ff);
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    font-size: 0.9rem;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.2rem; }
+    h3 { font-size: 1rem; }
+    img { max-width: 100%; }
+}
