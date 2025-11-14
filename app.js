@@ -1,113 +1,170 @@
-class Todo {
-  constructor(containerSelector) {
-    this.container = document.querySelector(containerSelector);
-    this.tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    this.term = "";
-    this.draw();
+const cleanDiv = document.getElementById("cleanMap");
+function syncSize(){
+  const rect = document.getElementById("map").getBoundingClientRect();
+  cleanDiv.style.width = rect.width + "px";
+  cleanDiv.style.height = rect.height + "px";
+}
+syncSize();
+window.addEventListener("resize", syncSize);
+
+
+const map = L.map('map', { zoomControl:false }).setView([52.237049, 21.017532], 13)
+const cleanMap = L.map('cleanMap', { zoomControl:false, attributionControl:false }).setView([52.237049, 21.017532], 13)
+
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19,
+  attribution: '',
+  crossOrigin: true
+}).addTo(map)
+
+
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19,
+  attribution: '',
+  crossOrigin: true
+}).addTo(cleanMap)
+
+
+map.on("move", syncCleanMap)
+map.on("zoom", syncCleanMap)
+
+function syncCleanMap(){
+  const c = map.getCenter()
+  cleanMap.setView(c, map.getZoom())
+}
+
+document.getElementById("zoom-in").onclick = ()=>map.zoomIn()
+document.getElementById("zoom-out").onclick = ()=>map.zoomOut()
+
+document.getElementById("loc-btn").onclick = () => {
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude, longitude } = pos.coords
+    L.marker([latitude,longitude]).addTo(map).bindPopup("Twoja lokalizacja").openPopup()
+    map.setView([latitude, longitude], 16)
+  })
+}
+
+document.getElementById("perm-btn").onclick = () => {
+  if(Notification.permission!=="granted") Notification.requestPermission()
+  navigator.geolocation.getCurrentPosition(()=>{},()=>{})
+}
+
+const piecesArea=document.getElementById("pieces-area")
+const board=document.getElementById("board")
+const snapshot=document.getElementById("snapshot")
+
+for(let i=0;i<16;i++){
+  const slot=document.createElement("div")
+  slot.className="slot"
+  slot.dataset.index=i
+  slot.addEventListener("dragover",e=>e.preventDefault())
+  slot.addEventListener("drop",onDrop)
+  board.appendChild(slot)
+}
+
+let pieces=[]
+
+document.getElementById("export-btn").onclick = async () => {
+  const canvas = await html2canvas(cleanDiv, { useCORS:true })
+  snapshot.src = canvas.toDataURL()
+  document.getElementById("placeholder").style.display = "none"
+  snapshot.style.display = "block"
+
+  const w=canvas.width
+  const h=canvas.height
+  const pw=w/4
+  const ph=h/4
+
+  piecesArea.innerHTML=""
+  pieces=[]
+
+  for(let r=0;r<4;r++){
+    for(let c=0;c<4;c++){
+      const temp=document.createElement("canvas")
+      temp.width=pw
+      temp.height=ph
+      const ctx=temp.getContext("2d")
+      ctx.drawImage(canvas,c*pw,r*ph,pw,ph,0,0,pw,ph)
+
+      const img=new Image()
+      img.src=temp.toDataURL()
+      img.className="piece"
+      img.draggable=true
+      img.dataset.index=r*4+c
+      img.dataset.size = pw * 1.0
+      img.style.width = pw*0.7 + "px"
+      img.style.height = "auto"
+
+      img.addEventListener("dragstart",e=>{
+        e.dataTransfer.setData("piece",img.dataset.index)
+      })
+
+      pieces.push(img)
+    }
   }
 
-  save() {
-    localStorage.setItem("tasks", JSON.stringify(this.tasks));
+  // Shuffle
+  pieces.sort(()=>Math.random()-0.5)
+  pieces.forEach(p=>piecesArea.appendChild(p))
+
+  // nowa mapka → czyścimy planszę
+  const slots = Array.from(board.children)
+  slots.forEach(slot => slot.innerHTML = "")
+}
+
+
+function onDrop(e){
+  e.preventDefault()
+  const slot = e.currentTarget
+  const index = e.dataTransfer.getData("piece")
+  const piece = pieces.find(p => p.dataset.index===index)
+  if(!piece) return
+
+  const existing = slot.querySelector("img")
+  if(existing){
+    // przywracamy stary puzzle do puli
+    const size = existing.dataset.size
+    existing.style.width = size + "px"
+    existing.style.height = "auto"
+    piecesArea.appendChild(existing)
   }
 
-  get filteredTasks() {
-    if (!this.term.trim()) return this.tasks;
-    return this.tasks.filter(task =>
-      task.name.toLowerCase().includes(this.term.toLowerCase())
-    );
-  }
+  piece.style.width = "100%"
+  piece.style.height = "auto"
+  slot.appendChild(piece)
 
-  draw() {
-    this.container.innerHTML = "";
-    this.filteredTasks.forEach((task, index) => {
-      const item = document.createElement("div");
-      item.className = "task-item";
+  checkCorrect()
+}
 
-      const info = document.createElement("div");
-      info.className = "task-info";
 
-      const name = document.createElement("span");
-      name.className = "task-name";
 
-      let highlightedName = task.name;
-      if (this.term.trim()) {
-        const regex = new RegExp(`(${this.term})`, "gi");
-        highlightedName = task.name.replace(regex, `<span class="highlight">$1</span>`);
-      }
-      name.innerHTML = highlightedName;
+function checkCorrect(){
+  const slots=[...board.children]
+  const ok=slots.every(slot=>{
+    const piece=slot.querySelector("img")
+    return piece && piece.dataset.index===slot.dataset.index
+  })
 
-      const date = document.createElement("span");
-      date.className = "task-date";
-      date.textContent = task.date;
-
-      info.append(name, date);
-
-      const actions = document.createElement("div");
-
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "Edit";
-      editBtn.className = "delete-btn";
-      editBtn.style.background = "#ffa500";
-      editBtn.onclick = () => this.editTask(index);
-
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Delete";
-      deleteBtn.className = "delete-btn";
-      deleteBtn.onclick = () => this.deleteTask(index);
-
-      actions.append(editBtn, deleteBtn);
-      item.append(info, actions);
-      this.container.appendChild(item);
-    });
-  }
-
-  addTask(name, date) {
-    if (!name.trim()) return;
-    this.tasks.push({ name, date });
-    this.save();
-    this.draw();
-  }
-
-  deleteTask(index) {
-    const realIndex = this.tasks.indexOf(this.filteredTasks[index]);
-    this.tasks.splice(realIndex, 1);
-    this.save();
-    this.draw();
-  }
-
-  editTask(index) {
-    const realIndex = this.tasks.indexOf(this.filteredTasks[index]);
-    const task = this.tasks[realIndex];
-
-    const newName = prompt("Edytuj nazwę:", task.name);
-    if (newName === null || !newName.trim()) return;
-
-    const newDate = prompt("Edytuj datę (RRRR-MM-DD):", task.date);
-    if (newDate) task.date = newDate;
-
-    task.name = newName.trim();
-    this.save();
-    this.draw();
+  if(ok){
+    setTimeout(() => {
+      if(Notification.permission==="granted") new Notification("Puzzle ułożone!")
+      else alert("Puzzle ułożone!")
+    }, 1000) 
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const todo = new Todo(".task-list");
-  const form = document.querySelector("form");
-  const nameInput = form.querySelector("input[type='text']");
-  const dateInput = form.querySelector("input[type='date']");
-  const searchInput = document.querySelector(".search-bar input");
+piecesArea.addEventListener("dragover",e=>e.preventDefault())
+piecesArea.addEventListener("drop", e=>{
+  e.preventDefault()
+  const index = e.dataTransfer.getData("piece")
+  const piece = pieces.find(p => p.dataset.index === index)
+  if(!piece) return
 
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    todo.addTask(nameInput.value, dateInput.value);
-    form.reset();
-  });
+  // ustawiamy stały, oryginalny rozmiar puzzla
+  const size = piece.dataset.size
+  piece.style.width = size + "px"
+  piece.style.height = "auto"
 
-  searchInput.addEventListener("input", () => {
-    todo.term = searchInput.value;
-    todo.draw();
-  });
+  piecesArea.appendChild(piece)
+})
 
-  window.todo = todo;
-});
