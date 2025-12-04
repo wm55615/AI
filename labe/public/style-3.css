@@ -1,0 +1,100 @@
+/* style-3.css — vintage / retro paper theme */
+
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    margin: 0;
+    padding: 0;
+    background: #f5ecd9;
+    background-image: 
+        radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,250,240,0.6), rgba(240,230,210,0.6));
+    background-size: 8px 8px, auto;
+    color: #3e2f1c;
+    line-height: 1.7;
+}
+
+/* HEADER – imitacja starego papieru */
+header {
+    background: #d7c4a3;
+    padding: 2rem 1rem;
+    text-align: center;
+    border-bottom: 4px double #8a6d46;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+h1 {
+    margin: 0;
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: #4b3a24;
+    text-shadow: 1px 1px #f7f1e3;
+    font-family: "Palatino Linotype", serif;
+}
+
+/* Sekcje */
+h2 {
+    margin: 2rem 1rem 1rem;
+    color: #6b4f2f;
+    border-left: 6px solid #a17856;
+    padding-left: 0.6rem;
+    font-size: 1.8rem;
+}
+
+h3 {
+    margin: 1rem 1rem 0.5rem;
+    color: #8a6d46;
+    font-size: 1.3rem;
+}
+
+p, ul {
+    margin: 0 1.5rem 1rem;
+    font-size: 1.05rem;
+}
+
+ul {
+    list-style: circle;
+    padding-left: 2rem;
+}
+
+/* Zdjęcie z ramką retro */
+figure {
+    margin: 1rem auto;
+    text-align: center;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 3px;
+    border: 4px solid #c2ab8e;
+    box-shadow: 
+        0 6px 10px rgba(0,0,0,0.3),
+        inset 0 0 30px rgba(255,255,255,0.5);
+}
+
+/* Linki stylów – mogą wyglądać bardziej retro */
+#style-menu a {
+    color: #6b4f2f;
+    text-decoration: none;
+    font-weight: bold;
+}
+#style-menu a:hover {
+    text-decoration: underline;
+    color: #a17856;
+}
+
+/* Responsywność */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem;
+    }
+    h1 {
+        font-size: 1.9rem;
+    }
+    h2 {
+        font-size: 1.4rem;
+    }
+    h3 {
+        font-size: 1.15rem;
+    }
+}
