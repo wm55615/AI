@@ -1,54 +1,48 @@
 <!doctype html>
 <html lang="pl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Map Puzzle</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8">
+  <title>Samochody</title>
+  <script src="src/script.ts" type="module" defer></script>   
 </head>
 <body>
-<div class="container">
+    <div id="style-menu"></div>
 
-<div class="card">
-  <div class="header">
-    <button id="loc-btn">Moja lokalizacja</button>
-    <button id="perm-btn">Pobierz zgody</button>
-    <button id="zoom-in">+</button>
-    <button id="zoom-out">-</button>
-  </div>
-  <div class="map-wrap">
-    <div id="map"></div>
-    <div id="cleanMap"></div>
-  </div>
-</div>
+    <header>
+        <h1>Samochody — krótki przewodnik</h1>
+    </header>
 
-<div class="card">
-    <div class="header">
-      <button id="export-btn">Pobierz mapę</button>
-      <div class="small">Podgląd</div>
-    </div>
-  
-    <div id="snapshot-wrap" style="flex:1; display:flex; justify-content:center; align-items:center; background:#eee;">
-        <div id="placeholder" style="color:#777; font-size:18px;">Brak mapy</div>
-        <img id="snapshot" src="" style="display:none; width:100%; height:100%; object-fit:cover;">
-    </div>
-  </div>
+    <h2>Typy samochodów</h2>
+        <h3>Hatchback</h3>
+        <p>Kompaktowe, praktyczne auta miejskie, łatwe w parkowaniu. Dzięki unoszonej tylnej klapie i składanym siedzeniom, hatchbacki są bardzo elastyczne pod względem przewozu bagażu.</p>
+        <p>Są szczególnie popularne w Europie, gdzie przestrzeń parkingowa jest ograniczona, a niskie spalanie ma duże znaczenie dla codziennego użytkownika.</p>
 
-<div class="card">
-  <div class="header"><div class="small">Puzzle</div></div>
-  <div id="pieces-area"></div>
-</div>
+        <h3>Sedan</h3>
+        <p>Klasyczne samochody z wyodrębnionym bagażnikiem, cenione za komfort i elegancki wygląd. Sedany oferują przestronne wnętrze i często wybierane są przez osoby ceniące tradycyjny styl.</p>
+        <p>W wielu krajach stanowią podstawę flot firmowych i są kojarzone z luksusem w wyższych segmentach.</p>
+        <figure>
+            <img src="1.jpg" alt="Ilustracja hatchbacka" width="600">
+        </figure>
 
-<div class="card">
-  <div class="header"><div class="small">Układanie puzzli</div></div>
-  <div class="board" id="board"></div>
-</div>
+    <h2>Silniki</h2>
+        <h3>Benzynowe</h3>
+        <p>Popularne, uniwersalne, często wybierane do aut miejskich. Zapewniają dobrą dynamikę, są cichsze niż diesle i zwykle tańsze w zakupie.</p>
+        <p>Nowoczesne jednostki benzynowe z turbodoładowaniem pozwalają na osiąganie wyższej mocy przy jednoczesnym zmniejszaniu pojemności skokowej silnika.</p>
 
-</div>
+        <h3>Diesel</h3>
+        <p>Oszczędne na trasie, idealne na dłuższe dystanse, szczególnie cenione przez osoby pokonujące wiele kilometrów rocznie. Diesle charakteryzują się dużym momentem obrotowym.</p>
+        <p>W nowoczesnych konstrukcjach stosuje się filtry cząstek stałych (DPF) i systemy oczyszczania spalin, aby sprostać normom emisji.</p>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="app.js"></script>
+    <h2>Na co zwrócić uwagę</h2>
+        <h3>Lista kontrolna</h3>
+        <p>Przy zakupie samochodu warto pamiętać o:</p>
+        <ul>
+        <li>Sprawdzeniu numeru VIN</li>
+        <li>Oględzinach nadwozia</li>
+        <li>Teście drogowym</li>
+        <li>Historii serwisowej</li>
+        <li>Ocenie kosztów eksploatacji</li>
+        </ul>
+
 </body>
 </html>
